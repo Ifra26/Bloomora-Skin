@@ -1,5 +1,5 @@
 const express = require('express');
-const { v4: uuid } = require('uuid');
+const { randomUUID: uuid } = require('crypto');
 const { body, validationResult } = require('express-validator');
 const db = require('../db');
 const { requireAdmin } = require('../middleware/auth');

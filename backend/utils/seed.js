@@ -2,7 +2,7 @@
 // Run with: npm run seed  (safe to re-run — it wipes and rebuilds the seed data,
 // but leaves any orders/customers created after seeding untouched only if RESET=false)
 const bcrypt = require('bcryptjs');
-const { v4: uuid } = require('uuid');
+const { randomUUID: uuid } = require('crypto');
 const db = require('../db');
 
 const categories = [
