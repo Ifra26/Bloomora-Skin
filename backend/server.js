@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-
 const authRoutes = require('./routes/auth');
 const categoryRoutes = require('./routes/categories');
 const productRoutes = require('./routes/products');
@@ -11,7 +10,26 @@ const contactRoutes = require('./routes/contact');
 
 const app = express();
 
-app.use(cors());
+// Allowed frontend/admin origins (add your custom domain here too if you have one)
+const allowedOrigins = [
+  'https://bloomora-skin-ux73.vercel.app',   // admin panel
+  'https://bloomora-skin-a6zn.vercel.app',   // frontend
+  'http://localhost:3000',                   // local dev (optional, remove in strict prod)
+  'http://localhost:5173'                    // local dev vite (optional)
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (like curl, mobile apps, server-to-server)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      return callback(new Error('CORS policy: This origin is not allowed - ' + origin), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok', name: 'Bloomora API' }));
