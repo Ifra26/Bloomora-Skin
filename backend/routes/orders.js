@@ -28,9 +28,14 @@ router.post(
     const orderId = uuid();
 
     await db.firestore.runTransaction(async (transaction) => {
-      for (const item of items) {
-        const productRef = db.docRef('products', item.productId);
-        const productSnap = await transaction.get(productRef);
+      // Firestore requires all reads in a transaction to happen before any writes,
+      // so first read every product, then do the writes in a second pass.
+      const productRefs = items.map((item) => db.docRef('products', item.productId));
+      const productSnaps = await Promise.all(productRefs.map((ref) => transaction.get(ref)));
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const productSnap = productSnaps[i];
         if (!productSnap.exists) {
           throw new Error('A product in your cart is no longer available.');
         }
@@ -52,8 +57,10 @@ router.post(
           image: product.images && product.images[0]
         });
         subtotal += product.price * qty;
+      }
 
-        transaction.update(productRef, { stock: product.stock - qty });
+      for (let i = 0; i < items.length; i++) {
+        transaction.update(productRefs[i], { stock: productSnaps[i].data().stock - (Number(items[i].qty) || 0) });
       }
 
       const shippingFee = subtotal >= 5000 ? 0 : 200;
