@@ -1,0 +1,23 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
+*.log
+.DS_Store
+.vscode/
+
+# Firebase service account - do NOT commit
+backend/*.json
+*bloomoraskin-*-firebase-adminsdk-*.json
+
+# Build outputs
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage
+coverage/
