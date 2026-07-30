@@ -1,8 +1,8 @@
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://bloomora-skin-7wws.vercel.app/api';
+﻿const BASE_URL = import.meta.env.VITE_API_URL || 'https://bloomora-skin-7wws.vercel.app/api';
 
 async function request(path, { method = 'GET', body, token } = {}) {
   const headers = { 'Content-Type': 'application/json' };
-  if (token) headers.Authorization = `Bearer ${token}`;
+  if (token) headers.Authorization = 'Bearer ' + token;
 
   const res = await fetch(`${BASE_URL}${path}`, {
     method,
@@ -26,3 +26,4 @@ export const api = {
   patch: (path, body, token) => request(path, { method: 'PATCH', body, token }),
   del: (path, token) => request(path, { method: 'DELETE', token })
 };
+

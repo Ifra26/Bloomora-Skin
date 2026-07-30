@@ -1,4 +1,4 @@
-require('dotenv').config();
+﻿require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
@@ -15,7 +15,7 @@ const allowedOrigins = [
   'https://bloomora-skin-ux73.vercel.app',   // admin panel (old)
   'https://bloomora-skin-a6zn.vercel.app',   // frontend (old)
   'https://bloomora-skin-2w8b.vercel.app',   // admin panel (current)
-  'https://bloomora-skin-7wws.vercel.app',   // frontend (current)
+  'https://bloomora-skin-a6zn.vercel.app',   // frontend (current)
   'http://localhost:3000',                   // local dev (optional, remove in strict prod)
   'http://localhost:5173'                    // local dev vite (optional)
 ];
@@ -62,3 +62,4 @@ if (require.main === module) {
 }
 
 module.exports = app;
+
