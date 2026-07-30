@@ -24,6 +24,10 @@ app.use(cors({
   origin: function (origin, callback) {
     // allow requests with no origin (like curl, mobile apps, server-to-server)
     if (!origin) return callback(null, true);
+    // allow any Vercel preview/deploy subdomain so PR previews and deployments can call the API
+    try {
+      if (origin.endsWith('.vercel.app')) return callback(null, true);
+    } catch (e) { /* ignore malformed origin */ }
     if (allowedOrigins.indexOf(origin) === -1) {
       return callback(new Error('CORS policy: This origin is not allowed - ' + origin), false);
     }
