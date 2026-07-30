@@ -1,4 +1,4 @@
-require('dotenv').config();
+﻿require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
@@ -12,8 +12,10 @@ const app = express();
 
 // Allowed frontend/admin origins (add your custom domain here too if you have one)
 const allowedOrigins = [
-  'https://bloomora-skin-ux73.vercel.app',   // admin panel
-  'https://bloomora-skin-a6zn.vercel.app',   // frontend
+  'https://bloomora-skin-ux73.vercel.app',   // admin panel (old)
+  'https://bloomora-skin-a6zn.vercel.app',   // frontend (old)
+  'https://bloomora-skin-2w8b.vercel.app',   // admin panel (current)
+  'https://bloomora-skin-a6zn.vercel.app',   // frontend (current)
   'http://localhost:3000',                   // local dev (optional, remove in strict prod)
   'http://localhost:5173'                    // local dev vite (optional)
 ];
@@ -22,6 +24,10 @@ app.use(cors({
   origin: function (origin, callback) {
     // allow requests with no origin (like curl, mobile apps, server-to-server)
     if (!origin) return callback(null, true);
+    // allow any Vercel preview/deploy subdomain so PR previews and deployments can call the API
+    try {
+      if (origin.endsWith('.vercel.app')) return callback(null, true);
+    } catch (e) { /* ignore malformed origin */ }
     if (allowedOrigins.indexOf(origin) === -1) {
       return callback(new Error('CORS policy: This origin is not allowed - ' + origin), false);
     }
@@ -60,3 +66,4 @@ if (require.main === module) {
 }
 
 module.exports = app;
+
